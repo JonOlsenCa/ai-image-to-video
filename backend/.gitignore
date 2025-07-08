@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+uploads/
+outputs/
+.env
+.venv
+*.pth
+*.safetensors
+models/

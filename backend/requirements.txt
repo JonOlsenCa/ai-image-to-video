@@ -1,0 +1,10 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+opencv-python==4.8.1.78
+diffusers==0.24.0
+transformers==4.35.2
+accelerate==0.24.1
+imageio[ffmpeg]==2.33.0
+aiofiles==23.2.1
+websockets==12.0
