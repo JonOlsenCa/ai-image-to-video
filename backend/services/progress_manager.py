@@ -46,16 +46,22 @@ class ProgressManager:
         # Send update to all connected websockets for this job
         await self._broadcast_update(job_id)
     
-    async def complete_job(self, job_id: str, success: bool = True):
+    async def complete_job(self, job_id: str, success: bool = True, error: str = None):
         if job_id in self.active_jobs:
             job = self.active_jobs[job_id]
             job["status"] = "completed" if success else "failed"
             job["progress"] = 100 if success else job["progress"]
             job["eta"] = 0
+            if success:
+                job["message"] = "Generation completed successfully!"
+                job["download_url"] = f"/download-video/{job_id}"
+            elif error:
+                job["message"] = f"Error: {error}"
             await self._broadcast_update(job_id)
             # Keep job info for 60 seconds after completion
             await asyncio.sleep(60)
-            del self.active_jobs[job_id]
+            if job_id in self.active_jobs:
+                del self.active_jobs[job_id]
     
     async def _broadcast_update(self, job_id: str):
         if job_id not in self.websocket_connections:

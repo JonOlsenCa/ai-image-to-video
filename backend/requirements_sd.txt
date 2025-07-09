@@ -1,0 +1,22 @@
+# Core requirements
+torch>=2.0.0
+torchvision
+transformers>=4.35.0
+accelerate>=0.24.0
+diffusers>=0.25.0
+
+# Video/Image processing
+imageio[ffmpeg]>=2.33.0
+opencv-python>=4.8.0
+Pillow>=10.0.0
+
+# API requirements
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+aiofiles==23.2.1
+websockets==12.0
+
+# Additional for better video processing
+numpy>=1.24.0
+scipy>=1.10.0

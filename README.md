@@ -1,93 +1,142 @@
-# AI Image to Video Generator
+# 🎬 AI Image-to-Video Generator with NSFW Support
 
-A local GPU-accelerated web application that converts static images into dynamic videos using Stable Video Diffusion.
+A powerful AI-powered tool that transforms static images into dynamic videos using advanced machine learning models, including **uncensored text-to-video generation** with NSFW-gen-v2.
 
-## Features
+## ✨ Features
 
-- Local GPU acceleration for fast video generation
-- Web-based interface with drag-and-drop image upload
-- Customizable video parameters (duration, motion intensity, noise strength)
-- Real-time GPU status monitoring
-- Video preview and download
+### 🤖 **Multiple AI Models**
+- **Stable Video Diffusion**: High-quality image-to-video generation
+- **NSFW-gen-v2**: Uncensored text-to-image and text-to-video generation
+- **AnimateDiff**: Animation-focused video generation
+- **DynamiCrafter**: Advanced person/object animation
+- **Simple Video Generator**: Fallback with 12 basic animations
 
-## Requirements
+### 🎯 **Generation Modes**
+- **Image-to-Video**: Transform static images into dynamic videos
+- **Text-to-Video**: Generate videos directly from text prompts (NSFW model)
+- **Image-Only**: Generate standalone uncensored images
 
-- NVIDIA GPU with CUDA support
+### 🌐 **Web Interface**
+- Easy-to-use drag-and-drop interface
+- Real-time progress tracking via WebSocket
+- GPU status monitoring
+- Model configuration controls
+
+### ⚡ **Performance**
+- GPU acceleration with NVIDIA CUDA
+- Automatic model fallback system
+- Memory optimization and CPU offloading
+- Async processing for multiple requests
+
+## 🚀 Quick Start
+
+### **One-Click Launch**
+Simply double-click `start_ai_video.bat` to automatically:
+- Set up virtual environment
+- Install dependencies
+- Start the server
+- Open the web interface
+
+### **Manual Setup**
+
+#### Prerequisites
 - Python 3.8+
-- Node.js 14+
-- CUDA 11.8 or later
-- At least 8GB VRAM (16GB recommended)
+- NVIDIA GPU with 8GB+ VRAM (recommended)
+- Windows 10/11
 
-## Installation
-
-### Backend Setup
-
-1. Navigate to the backend directory:
+#### Installation
 ```bash
-cd backend
+git clone https://github.com/your-username/ai-image-to-video.git
+cd ai-image-to-video
+start_ai_video.bat
 ```
 
-2. Create a virtual environment:
+## 📖 Usage
+
+### **Web Interface**
+1. Open `http://localhost:8000` in your browser
+2. **For Image-to-Video**: Upload an image and set parameters
+3. **For Text-to-Video**: Enable NSFW model and enter text prompt
+4. Click "Generate" and monitor progress
+5. Download your generated content
+
+### **API Usage**
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Enable NSFW model for text-to-video
+curl -X POST "http://localhost:8000/configure-nsfw" \
+     -H "Content-Type: application/json" \
+     -d '{"enable_nsfw": true}'
+
+# Generate video from text (no image needed)
+curl -X POST "http://localhost:8000/generate-video" \
+     -F "prompt=your text prompt here" \
+     -F "duration=10"
+
+# Generate image only
+curl -X POST "http://localhost:8000/generate-image" \
+     -H "Content-Type: application/json" \
+     -d '{"prompt": "your prompt here"}'
 ```
 
-3. Install PyTorch with CUDA support:
-```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+## 🔧 API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Web interface |
+| `/generate-video` | POST | Generate video from image or text |
+| `/generate-image` | POST | Generate image only (NSFW) |
+| `/configure-nsfw` | POST | Enable/disable NSFW model |
+| `/model-info` | GET | Get current model information |
+| `/progress/{job_id}` | GET | Get generation progress |
+| `/download/{job_id}` | GET | Download generated video |
+| `/download-image/{job_id}` | GET | Download generated image |
+| `/ws/{job_id}` | WebSocket | Real-time progress updates |
+
+## ⚠️ NSFW Model Notice
+
+The NSFW-gen-v2 model provides uncensored content generation:
+- **Age Restriction**: 18+ only
+- **Legal Compliance**: Ensure compliance with local laws
+- **Responsible Use**: Use ethically and responsibly
+- **Content Warning**: Generates explicit/adult content
+
+## 📁 Project Structure
+
+```
+ai-image-to-video/
+├── start_ai_video.bat          # 🚀 One-click launcher
+├── README.md                   # 📖 This file
+├── backend/                    # 🔧 Server code
+│   ├── main.py                # FastAPI server
+│   ├── requirements.txt       # Dependencies
+│   └── services/              # AI model services
+├── frontend/                   # 🌐 Web interface
+├── docs/                      # 📚 Documentation
+├── tests/                     # 🧪 Test files
+├── scripts/                   # 🔨 Utility scripts
+└── temp/                      # 🗂️ Temporary files
 ```
 
-4. Install other dependencies:
-```bash
-pip install -r requirements.txt
-```
+## 🎛️ Configuration
 
-### Frontend Setup
+The application automatically:
+- Detects available GPU/CUDA
+- Downloads models on first use (~10GB)
+- Falls back gracefully between models
+- Optimizes memory usage
 
-1. Navigate to the frontend directory:
-```bash
-cd frontend
-```
+## 🤝 Contributing
 
-2. Install dependencies:
-```bash
-npm install
-```
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests: `python tests/test_nsfw_integration_simple.py`
+5. Submit a pull request
 
-## Running the Application
+## 📄 License
 
-1. Start the backend server:
-```bash
-cd backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-2. In a new terminal, start the frontend:
-```bash
-cd frontend
-npm start
-```
+---
 
-3. Open http://localhost:3000 in your browser
-
-## Usage
-
-1. The app will show your GPU status at the top
-2. Drag and drop an image or click to select
-3. Adjust video settings:
-   - Duration: Length of the video (1-10 seconds)
-   - Motion Intensity: Controls the amount of movement (1-255)
-   - Noise Strength: Adds variation to the generation (0-0.1)
-4. Click "Generate Video" and wait for processing
-5. Preview and download your generated video
-
-## Model Information
-
-This app uses Stable Video Diffusion (SVD) from Stability AI. The model will be downloaded automatically on first use (~5GB).
-
-## Troubleshooting
-
-- If GPU is not detected, ensure CUDA is properly installed
-- For out of memory errors, try reducing the video duration or closing other GPU applications
-- The first generation will be slower as the model needs to be downloaded and loaded
+**⚡ Ready to create amazing AI videos? Run `start_ai_video.bat` and get started!**
